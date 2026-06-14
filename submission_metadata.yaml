@@ -1,0 +1,61 @@
+# Redrob Hackathon — Submission Metadata
+# Intelligent Candidate Discovery & Ranking Challenge
+
+team_name: "NeuralRank"
+
+primary_contact:
+  name: "Sandeep"
+  email: "sandeepdk180@gmail.com"
+  phone: "+91-8595547675"
+
+team_members:
+  - name: "Sandeep"
+    email: "sandeepdk180@gmail.com"
+    
+
+github_repo: "https://github.com/SandeepKumarDubey7/redrob-ranker"
+
+sandbox_link: "https://huggingface.co/spaces/PLACEHOLDER/redrob-ranker"
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+
+compute:
+  platform: "Windows PC"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.13"
+  os: "Windows"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: false
+  pre_computation_time_minutes: 0
+
+ai_tools_used:
+  - "Claude"
+
+ai_usage_summary: |
+  Used Claude for architecture discussion and code review.
+  No candidate data was fed to any LLM during ranking.
+  All ranking logic is deterministic rule-based + TF-IDF scoring.
+
+methodology_summary: |
+  Hybrid ranking system combining TF-IDF semantic search with multi-dimensional
+  rule-based scoring. Seven scoring dimensions: title/role fit (22%), skill match
+  (18%), career trajectory (15%), semantic similarity (15%), skill credibility (8%),
+  experience band (8%), location (5%), education (3%), certifications (3%), and
+  behavioral signals (3% additive + multiplicative modifier).
+
+  Anti-trap design: title analysis catches keyword stuffers (Marketing Managers
+  with AI skills); skill credibility cross-validates claims against career
+  descriptions and duration/endorsement backing; 9-heuristic honeypot detector
+  identifies impossible profiles. Behavioral modifier (0.4-1.35x) down-weights
+  inactive/unresponsive candidates per JD guidance.
+
+  Runtime: ~3 minutes for 100K candidates on CPU. Pure Python + numpy.
+
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true
