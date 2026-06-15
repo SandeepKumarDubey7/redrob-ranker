@@ -378,13 +378,18 @@ with st.sidebar:
     candidates = []
 
     if data_source == "Sample (10 candidates)":
-        sample_path = os.path.join(
-            "[PUB] India_runs_data_and_ai_challenge",
-            "[PUB] India_runs_data_and_ai_challenge",
-            "India_runs_data_and_ai_challenge",
-            "sample_candidates.json"
-        )
-        if os.path.exists(sample_path):
+        # Check data/ folder first (Streamlit Cloud), then nested path (local)
+        sample_paths = [
+            os.path.join("data", "sample_candidates.json"),
+            os.path.join(
+                "[PUB] India_runs_data_and_ai_challenge",
+                "[PUB] India_runs_data_and_ai_challenge",
+                "India_runs_data_and_ai_challenge",
+                "sample_candidates.json"
+            ),
+        ]
+        sample_path = next((p for p in sample_paths if os.path.exists(p)), None)
+        if sample_path:
             with open(sample_path, "r", encoding="utf-8") as f:
                 all_samples = json.load(f)
                 candidates = all_samples[:10]
@@ -404,14 +409,18 @@ with st.sidebar:
             st.success(f"Loaded {len(candidates)} candidates")
 
     elif data_source == "Full Dataset (100K)":
-        full_path = os.path.join(
-            "[PUB] India_runs_data_and_ai_challenge",
-            "[PUB] India_runs_data_and_ai_challenge",
-            "India_runs_data_and_ai_challenge",
-            "candidates.jsonl"
-        )
-        if os.path.exists(full_path):
-            st.warning("Full dataset is 487MB. This will take ~2 minutes.")
+        full_paths = [
+            os.path.join("data", "candidates.jsonl"),
+            os.path.join(
+                "[PUB] India_runs_data_and_ai_challenge",
+                "[PUB] India_runs_data_and_ai_challenge",
+                "India_runs_data_and_ai_challenge",
+                "candidates.jsonl"
+            ),
+        ]
+        full_path = next((p for p in full_paths if os.path.exists(p)), None)
+        if full_path:
+            st.warning("Full dataset is 465MB. This will take ~2 minutes.")
             if st.button("Load Full Dataset"):
                 with st.spinner("Loading 100K candidates..."):
                     with open(full_path, "r", encoding="utf-8") as f:
@@ -421,7 +430,12 @@ with st.sidebar:
             elif "candidates" in st.session_state:
                 candidates = st.session_state["candidates"]
         else:
-            st.error("Full dataset not found at expected path.")
+            st.error(
+                "Full dataset (465MB) is too large for GitHub/Streamlit Cloud. "
+                "To use the full dataset, run locally:\n\n"
+                "`streamlit run app.py`\n\n"
+                "Place `candidates.jsonl` in the `data/` folder."
+            )
 
     st.markdown("---")
     st.markdown("### Architecture")

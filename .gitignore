@@ -1,7 +1,9 @@
-# Dataset files (too large for GitHub)
+# Large dataset files (too large for GitHub)
 [PUB] India_runs_data_and_ai_challenge/
-candidates.jsonl
-sample_candidates.json
+/candidates.jsonl
+
+# Sample data for Streamlit Cloud (committed)
+!data/
 
 # Pre-computed embeddings
 precomputed/
